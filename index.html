@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Alfabet Ghani (A-Z)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Nunito untuk tipografi bulat ramah anak -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti untuk perayaan bintang & kelulusan -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Pengaturan dasar font dan langit pastel ceria */
+        body {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #BAE6FD 0%, #E0F2FE 35%, #FEF9C3 75%, #FCE7F3 100%);
+            min-height: 100vh;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animasi awan lembut di latar langit */
+        @keyframes cloudDrift {
+            0% { transform: translateX(-15vw); }
+            100% { transform: translateX(115vw); }
+        }
+        .cloud-bg {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.65;
+            filter: drop-shadow(0 4px 6px rgba(255,255,255,0.6));
+        }
+        .cloud-1 { top: 8%; animation: cloudDrift 48s linear infinite; }
+        .cloud-2 { top: 24%; animation: cloudDrift 65s linear infinite -20s; }
+        .cloud-3 { top: 62%; animation: cloudDrift 55s linear infinite -35s; }
+
+        /* Efek tombol 3D ceria (Bubble / Push Button) */
+        .btn-3d {
+            transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+        }
+        .btn-3d:hover {
+            transform: translateY(-4px) scale(1.03);
+        }
+        .btn-3d:active {
+            transform: translateY(4px) scale(0.97);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2) !important;
+        }
+
+        /* Animasi melayang & memantul ceria untuk ilustrasi */
+        @keyframes playfulBounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            40% { transform: translateY(-12px) rotate(3deg) scale(1.05); }
+            70% { transform: translateY(-4px) rotate(-2deg) scale(1.02); }
+        }
+        .animate-playful {
+            animation: playfulBounce 2.8s ease-in-out infinite;
+        }
+
+        /* Animasi kilau emas untuk kartu spesial Huruf G (Ghani) */
+        @keyframes goldenGlow {
+            0%, 100% { box-shadow: 0 7px 0 #3730A3, 0 0 0 0 rgba(250, 204, 21, 0.7); }
+            50% { box-shadow: 0 7px 0 #3730A3, 0 0 18px 4px rgba(250, 204, 21, 0.9); }
+        }
+        .special-ghani-card {
+            animation: goldenGlow 2.5s infinite;
+        }
+
+        /* Animasi pop-in untuk modal dan layar */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.65) translateY(20px); }
+            70% { opacity: 1; transform: scale(1.04) translateY(-3px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop-in {
+            animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Animasi goyang lembut saat jawaban kurang tepat */
+        @keyframes gentleShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px) rotate(-2deg); }
+            40% { transform: translateX(10px) rotate(2deg); }
+            60% { transform: translateX(-8px) rotate(-1deg); }
+            80% { transform: translateX(8px) rotate(1deg); }
+        }
+        .animate-shake {
+            animation: gentleShake 0.45s ease-in-out;
+        }
+
+        /* Animasi denyut tombol suara */
+        @keyframes pulseRing {
+            0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 14px rgba(14, 165, 233, 0); }
+            100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        }
+        .pulse-audio {
+            animation: pulseRing 2s infinite;
+        }
+
+        /* Custom Scrollbar ramah tampilan */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.5); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FBBF24; border-radius: 10px; border: 2px solid #FFFBEB; }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col justify-between">
+
+    <!-- DEKORASI AWAN BERGERAK LEMBUT DI LANGIT -->
+    <div class="cloud-bg cloud-1 text-6xl sm:text-8xl" aria-hidden="true">☁️</div>
+    <div class="cloud-bg cloud-2 text-5xl sm:text-7xl" aria-hidden="true">☁️</div>
+    <div class="cloud-bg cloud-3 text-6xl sm:text-8xl" aria-hidden="true">☁️</div>
+
+    <!-- HEADER / BAR NAVIGASI ATAS PERSONAL GHANI -->
+    <header class="w-full max-w-6xl mx-auto px-4 pt-4 pb-2 flex flex-wrap items-center justify-between gap-3 z-20">
+        <!-- Logo / Judul Game Personal -->
+        <button onclick="switchScreen('home')" class="flex items-center gap-3 bg-white/95 backdrop-blur-sm px-4 py-2.5 rounded-3xl shadow-[0_5px_0_#CBD5E1] border-2 border-indigo-200 btn-3d cursor-pointer">
+            <span class="text-3xl sm:text-4xl">👑</span>
+            <div class="text-left">
+                <h1 class="text-lg sm:text-2xl font-bold text-indigo-700 leading-tight tracking-wide">Petualangan Alfabet Ghani</h1>
+                <p class="text-xs sm:text-sm font-semibold text-amber-600">Belajar Huruf A - Z Bersama Ghani</p>
+            </div>
+        </button>
+
+        <!-- Kontrol Navigasi, Bintang Ghani & Suara -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Tombol Menu Utama (Muncul saat tidak di layar utama) -->
+            <button id="btn-home" onclick="switchScreen('home')" class="hidden items-center gap-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-4 py-3 rounded-2xl shadow-[0_5px_0_#D97706] border-2 border-amber-300 btn-3d text-base sm:text-lg cursor-pointer">
+                <span>🏠</span>
+                <span class="hidden sm:inline">Menu</span>
+            </button>
+
+            <!-- Penghitung Bintang Milik Ghani -->
+            <div class="flex items-center gap-2 bg-white/95 px-3.5 sm:px-4 py-2 rounded-2xl shadow-[0_5px_0_#FDE68A] border-2 border-amber-300 transition-transform" title="Bintang Ghani">
+                <span class="text-2xl sm:text-3xl">⭐</span>
+                <div class="flex flex-col leading-none">
+                    <span class="text-[10px] sm:text-xs font-bold text-amber-700 uppercase">Bintang Ghani</span>
+                    <span id="total-stars-display" class="text-xl sm:text-2xl font-bold text-amber-600">0</span>
+                </div>
+            </div>
+
+            <!-- Tombol Mute / Unmute Suara -->
+            <button id="btn-sound-toggle" onclick="toggleSound()" aria-label="Matikan atau Nyalakan Suara" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-sky-400 hover:bg-sky-300 text-white rounded-2xl shadow-[0_5px_0_#0284C7] border-2 border-sky-300 btn-3d text-2xl sm:text-3xl cursor-pointer">
+                🔊
+            </button>
+        </div>
+    </header>
+
+    <!-- AREA KONTEN UTAMA -->
+    <main class="flex-grow w-full max-w-6xl mx-auto px-4 py-4 flex flex-col items-center justify-center relative z-10">
+
+        <!-- 1. LAYAR UTAMA (SAMBUTAN PERSONAL GHANI & PILIHAN MODE) -->
+        <section id="screen-home" class="w-full max-w-4xl flex flex-col items-center text-center animate-pop-in">
+            <!-- Dekorasi Karakter Favorit -->
+            <div class="flex items-center justify-center gap-4 mb-2 text-5xl sm:text-7xl animate-playful">
+                <span>🐘</span>
+                <span>👑</span>
+                <span>🦁</span>
+            </div>
+
+            <div class="inline-block bg-amber-300/90 text-amber-950 font-bold px-4 py-1 rounded-full text-sm sm:text-base mb-2 border-2 border-amber-400 shadow-xs">
+                ✨ Spesial Untuk Jagoan Cilik ✨
+            </div>
+
+            <h2 class="text-3xl sm:text-5xl font-bold text-indigo-700 mb-3 drop-shadow-xs">
+                Halo Ghani! 👋
+            </h2>
+            <p class="text-lg sm:text-2xl text-slate-700 font-semibold mb-6 max-w-2xl bg-white/75 backdrop-blur-xs px-5 py-3 rounded-3xl border-2 border-white shadow-xs">
+                Ayo belajar dan bermain mengenal huruf <span class="text-rose-500 font-bold">A</span> sampai <span class="text-emerald-600 font-bold">Z</span>!
+            </p>
+
+            <!-- Tombol Sapaan Mulai Utama -->
+            <button onclick="greetGhaniAndStart()" class="mb-7 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 hover:brightness-105 text-white font-bold text-xl sm:text-2xl px-8 py-4 rounded-full shadow-[0_7px_0_#C2410C] border-4 border-white btn-3d flex items-center gap-3 cursor-pointer">
+                <span class="text-2xl sm:text-3xl">🚀</span>
+                <span>Mulai Petualangan Ghani!</span>
+            </button>
+
+            <!-- Kartu Pilihan Mode Permainan -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 w-full">
+                <!-- Mode 1: Jelajah Alfabet -->
+                <button onclick="startLearnMode()" class="group bg-gradient-to-b from-emerald-400 to-emerald-500 text-white p-6 rounded-3xl shadow-[0_8px_0_#047857] border-4 border-emerald-300 btn-3d flex flex-col items-center justify-between text-center cursor-pointer">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white/25 rounded-full flex items-center justify-center text-5xl sm:text-6xl mb-3 group-hover:scale-110 transition-transform">
+                        🔤
+                    </div>
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-bold mb-1.5">Jelajah Huruf</h3>
+                        <p class="text-emerald-50 text-base sm:text-lg font-medium">Kenali huruf A-Z, gambar lucu, dan suaranya</p>
+                    </div>
+                    <span class="mt-4 bg-white text-emerald-700 font-bold px-5 py-2 rounded-full text-base sm:text-lg shadow-xs">
+                        Belajar Yuk! 📖
+                    </span>
+                </button>
+
+                <!-- Mode 2: Kuis Tebak Huruf -->
+                <button onclick="startQuizMode('letter')" class="group bg-gradient-to-b from-sky-400 to-blue-500 text-white p-6 rounded-3xl shadow-[0_8px_0_#1D4ED8] border-4 border-sky-300 btn-3d flex flex-col items-center justify-between text-center cursor-pointer">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white/25 rounded-full flex items-center justify-center text-5xl sm:text-6xl mb-3 group-hover:scale-110 transition-transform">
+                        🎧
+                    </div>
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-bold mb-1.5">Tebak Huruf</h3>
+                        <p class="text-sky-50 text-base sm:text-lg font-medium">Dengar suara & lihat petunjuk untuk pilih huruf</p>
+                    </div>
+                    <span class="mt-4 bg-white text-blue-700 font-bold px-5 py-2 rounded-full text-base sm:text-lg shadow-xs">
+                        Mainkan! 🎯
+                    </span>
+                </button>
+
+                <!-- Mode 3: Kuis Tebak Gambar Awalan -->
+                <button onclick="startQuizMode('picture')" class="group bg-gradient-to-b from-rose-400 to-pink-500 text-white p-6 rounded-3xl shadow-[0_8px_0_#BE185D] border-4 border-rose-300 btn-3d flex flex-col items-center justify-between text-center cursor-pointer">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white/25 rounded-full flex items-center justify-center text-5xl sm:text-6xl mb-3 group-hover:scale-110 transition-transform">
+                        🖼️
+                    </div>
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-bold mb-1.5">Tebak Gambar</h3>
+                        <p class="text-rose-50 text-base sm:text-lg font-medium">Cari benda atau hewan sesuai huruf di tengah</p>
+                    </div>
+                    <span class="mt-4 bg-white text-rose-700 font-bold px-5 py-2 rounded-full text-base sm:text-lg shadow-xs">
+                        Mainkan! 🧩
+                    </span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. MODE BELAJAR (JELAJAH ALFABET A-Z) -->
+        <section id="screen-learn" class="hidden w-full flex-col items-center">
+            <div class="w-full max-w-4xl bg-white/90 backdrop-blur-sm px-5 py-3.5 rounded-3xl shadow-sm border-2 border-indigo-200 mb-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+                <h2 class="text-xl sm:text-2xl font-bold text-indigo-700">
+                    Ketuk hurufnya ya, Ghani! 🔊
+                </h2>
+                <div class="bg-emerald-100 text-emerald-800 font-bold px-4 py-1.5 rounded-full text-sm sm:text-base border border-emerald-300">
+                    Huruf Dipelajari: <span id="learned-count">0</span> / 26 🌟
+                </div>
+            </div>
+
+            <!-- Grid 26 Kartu Huruf A-Z -->
+            <div id="alphabet-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3.5 sm:gap-4 w-full pb-6">
+                <!-- Kartu huruf diisi secara dinamis oleh JavaScript -->
+            </div>
+        </section>
+
+        <!-- 3. MODE BERMAIN / KUIS INTERAKTIF GHANI -->
+        <section id="screen-quiz" class="hidden w-full max-w-3xl flex-col items-center">
+            <!-- Bar Progres, Streak & Skor Sesi -->
+            <div class="w-full bg-white/95 p-4 rounded-3xl shadow-[0_6px_0_#E2E8F0] border-2 border-slate-200 mb-5 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span id="quiz-mode-badge" class="bg-indigo-100 text-indigo-700 font-bold px-3.5 py-1.5 rounded-full text-sm sm:text-base">
+                        Tebak Huruf
+                    </span>
+                    <span class="font-bold text-slate-600 text-base sm:text-lg">
+                        Soal <span id="quiz-current-num" class="text-indigo-600 text-xl">1</span>/10
+                    </span>
+                </div>
+
+                <!-- Bar Progres Visual -->
+                <div class="flex-grow sm:max-w-[180px] h-4 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
+                    <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-500 rounded-full" style="width: 10%;"></div>
+                </div>
+
+                <!-- Indikator Streak & Bintang Sesi -->
+                <div class="flex items-center gap-2">
+                    <div id="streak-badge" class="hidden items-center gap-1 bg-orange-100 text-orange-700 px-3 py-1 rounded-full border border-orange-300 font-bold text-sm sm:text-base">
+                        <span>🔥</span>
+                        <span id="quiz-streak-count">0</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-amber-100 px-3.5 py-1 rounded-full border border-amber-300">
+                        <span class="text-xl">⭐</span>
+                        <span id="quiz-session-stars" class="font-bold text-amber-700 text-lg">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Pertanyaan -->
+            <div id="quiz-question-card" class="w-full bg-white rounded-3xl p-6 sm:p-8 shadow-[0_8px_0_#CBD5E1] border-4 border-indigo-200 text-center mb-6 relative">
+                <p id="quiz-instruction" class="text-xl sm:text-2xl font-bold text-slate-700 mb-4">
+                    Dengarkan baik-baik ya Ghani...
+                </p>
+
+                <!-- Konten Soal Dinamis (Tombol Suara Besar atau Huruf Target) -->
+                <div id="quiz-prompt-area" class="flex flex-col items-center justify-center my-2">
+                    <!-- Diisi oleh JS -->
+                </div>
+
+                <!-- Pesan Umpan Balik Personal untuk Ghani -->
+                <div id="quiz-feedback" class="min-h-[2.5rem] mt-3 flex items-center justify-center text-lg sm:text-xl font-bold transition-all">
+                    <!-- Diisi oleh JS saat Ghani menjawab -->
+                </div>
+            </div>
+
+            <!-- Grid Pilihan Jawaban (4 Pilihan Besar) -->
+            <div id="quiz-options-grid" class="grid grid-cols-2 gap-4 sm:gap-6 w-full">
+                <!-- Tombol pilihan jawaban diisi oleh JS -->
+            </div>
+        </section>
+
+        <!-- 4. LAYAR PERAYAAN (SELESAI 10 SOAL KUIS) -->
+        <section id="screen-celebration" class="hidden w-full max-w-2xl bg-white rounded-3xl p-7 sm:p-10 shadow-[0_10px_0_#F59E0B] border-4 border-amber-300 text-center flex-col items-center animate-pop-in">
+            <div class="text-6xl sm:text-8xl mb-3 animate-bounce">🏆</div>
+            <h2 class="text-3xl sm:text-5xl font-bold text-indigo-700 mb-2">Wah, Ghani Jagoan Alfabet! 🎉</h2>
+            <p class="text-lg sm:text-2xl text-slate-600 font-medium mb-6">
+                Hebat sekali, Ghani berhasil menyelesaikan semua tantangan!
+            </p>
+
+            <!-- Ringkasan Bintang yang Didapat Ghani -->
+            <div class="bg-amber-50 border-4 border-amber-200 rounded-3xl p-5 sm:p-6 w-full mb-7">
+                <p class="text-base sm:text-lg font-bold text-amber-800 mb-2">Bintang yang Ghani Kumpulkan:</p>
+                <div class="flex items-center justify-center gap-3 text-4xl sm:text-6xl font-bold text-amber-500">
+                    <span>⭐</span>
+                    <span id="celebration-stars">10</span>
+                    <span class="text-2xl sm:text-3xl text-amber-700">/ 10</span>
+                </div>
+            </div>
+
+            <!-- Tombol Aksi Lanjutan -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                <button onclick="restartCurrentQuiz()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xl py-4 px-6 rounded-2xl shadow-[0_6px_0_#047857] border-2 border-emerald-300 btn-3d cursor-pointer">
+                    🔄 Main Lagi
+                </button>
+                <button onclick="switchScreen('home')" class="flex-1 bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xl py-4 px-6 rounded-2xl shadow-[0_6px_0_#3730A3] border-2 border-indigo-300 btn-3d cursor-pointer">
+                    🏠 Menu Utama
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL POP-UP DETAIL HURUF (UNTUK MODE BELAJAR) -->
+    <div id="letter-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50" onclick="closeModalOnBackdrop(event)">
+        <div id="letter-modal-card" class="bg-white w-full max-w-lg rounded-[2.5rem] p-6 sm:p-8 shadow-2xl border-8 border-amber-300 relative text-center animate-pop-in">
+            <!-- Tombol Tutup (X) -->
+            <button onclick="closeLetterModal()" aria-label="Tutup Kartu" class="absolute -top-4 -right-4 w-12 h-12 sm:w-14 sm:h-14 bg-rose-500 hover:bg-rose-400 text-white font-bold text-2xl rounded-full shadow-[0_4px_0_#9F1239] border-4 border-white btn-3d flex items-center justify-center cursor-pointer">
+                ✖
+            </button>
+
+            <!-- Badge Spesial Khusus Huruf G ("G untuk Ghani!") -->
+            <div id="modal-ghani-special" class="hidden mb-3">
+                <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 text-amber-950 font-extrabold px-4 py-1.5 rounded-full text-sm sm:text-base border-2 border-amber-500 shadow-xs animate-bounce">
+                    👑 Spesial: Huruf Awal Nama GHANI! 👑
+                </span>
+            </div>
+
+            <!-- Tampilan Huruf Besar & Kecil -->
+            <div id="modal-letter-badge" class="inline-flex items-center justify-center gap-3 px-8 py-3 rounded-3xl text-white font-bold text-6xl sm:text-7xl shadow-md mb-3">
+                <span id="modal-upper">A</span>
+                <span id="modal-lower" class="opacity-90">a</span>
+            </div>
+
+            <!-- Ilustrasi Emoji Besar yang Memantul Ceria -->
+            <div id="modal-emoji" class="text-8xl sm:text-9xl my-3 animate-playful drop-shadow-md cursor-pointer" onclick="speakCurrentModalLetter()">
+                🍎
+            </div>
+
+            <!-- Nama Benda / Hewan dengan Huruf Awal Ditebalkan -->
+            <h3 id="modal-word" class="text-4xl sm:text-5xl font-bold text-slate-800 tracking-wide mb-1.5">
+                <span class="text-rose-500">A</span>pel
+            </h3>
+            <p id="modal-phonetic" class="text-lg sm:text-xl text-slate-500 font-semibold mb-6">
+                "A" untuk Apel
+            </p>
+
+            <!-- Tombol Navigasi & Dengar Lagi -->
+            <div class="flex items-center justify-between gap-3">
+                <button onclick="navigateModalLetter(-1)" aria-label="Huruf Sebelumnya" class="w-14 h-14 sm:w-16 sm:h-16 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-2xl sm:text-3xl rounded-2xl shadow-[0_5px_0_#94A3B8] btn-3d flex items-center justify-center cursor-pointer">
+                    ⬅️
+                </button>
+
+                <button onclick="speakCurrentModalLetter()" class="flex-grow bg-sky-500 hover:bg-sky-400 text-white font-bold text-lg sm:text-2xl py-4 px-5 rounded-2xl shadow-[0_6px_0_#0369A1] border-2 border-sky-300 btn-3d pulse-audio flex items-center justify-center gap-2 cursor-pointer">
+                    <span>🔊</span>
+                    <span>Dengar Lagi</span>
+                </button>
+
+                <button onclick="navigateModalLetter(1)" aria-label="Huruf Berikutnya" class="w-14 h-14 sm:w-16 sm:h-16 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-2xl sm:text-3xl rounded-2xl shadow-[0_5px_0_#94A3B8] btn-3d flex items-center justify-center cursor-pointer">
+                    ➡️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER PERSONAL -->
+    <footer class="w-full text-center py-3 text-slate-600 text-xs sm:text-sm font-semibold relative z-10">
+        Dibuat khusus untuk <span class="text-indigo-700 font-bold">Ghani</span> 🌟 • Belajar Sambil Bermain
+    </footer>
+
+    <!-- LOGIKA JAVASCRIPT GAME EDUKASI ALFABET GHANI -->
+    <script>
+        /**
+         * DATA LENGKAP ALFABET A-Z DALAM BAHASA INDONESIA
+         * Disesuaikan dengan objek ramah anak & tanda spesial untuk huruf G (Ghani)
+         */
+        const ALPHABET_DATA = [
+            { letter: 'A', lower: 'a', word: 'Apel', emoji: '🍎', bg: 'bg-rose-500', shadow: '#9F1239', border: 'border-rose-300', textHighlight: 'text-rose-500' },
+            { letter: 'B', lower: 'b', word: 'Bebek', emoji: '🦆', bg: 'bg-amber-400', shadow: '#B45309', border: 'border-amber-200', textHighlight: 'text-amber-500' },
+            { letter: 'C', lower: 'c', word: 'Cicak', emoji: '🦎', bg: 'bg-emerald-500', shadow: '#065F46', border: 'border-emerald-300', textHighlight: 'text-emerald-600' },
+            { letter: 'D', lower: 'd', word: 'Domba', emoji: '🐑', bg: 'bg-sky-500', shadow: '#075985', border: 'border-sky-300', textHighlight: 'text-sky-600' },
+            { letter: 'E', lower: 'e', word: 'Elang', emoji: '🦅', bg: 'bg-orange-500', shadow: '#9A3412', border: 'border-orange-300', textHighlight: 'text-orange-600' },
+            { letter: 'F', lower: 'f', word: 'Flamingo', emoji: '🦩', bg: 'bg-pink-500', shadow: '#9D174D', border: 'border-pink-300', textHighlight: 'text-pink-600' },
+            { letter: 'G', lower: 'g', word: 'Gajah', emoji: '🐘', bg: 'bg-indigo-600', shadow: '#3730A3', border: 'border-amber-300', textHighlight: 'text-indigo-600', isSpecialGhani: true },
+            { letter: 'H', lower: 'h', word: 'Harimau', emoji: '🐯', bg: 'bg-amber-500', shadow: '#92400E', border: 'border-amber-300', textHighlight: 'text-amber-600' },
+            { letter: 'I', lower: 'i', word: 'Ikan', emoji: '🐟', bg: 'bg-cyan-500', shadow: '#155E75', border: 'border-cyan-300', textHighlight: 'text-cyan-600' },
+            { letter: 'J', lower: 'j', word: 'Jerapah', emoji: '🦒', bg: 'bg-yellow-500', shadow: '#854D0E', border: 'border-yellow-300', textHighlight: 'text-yellow-600' },
+            { letter: 'K', lower: 'k', word: 'Kucing', emoji: '🐱', bg: 'bg-rose-400', shadow: '#9F1239', border: 'border-rose-200', textHighlight: 'text-rose-500' },
+            { letter: 'L', lower: 'l', word: 'Lumba-lumba', emoji: '🐬', bg: 'bg-blue-500', shadow: '#1E40AF', border: 'border-blue-300', textHighlight: 'text-blue-600' },
+            { letter: 'M', lower: 'm', word: 'Monyet', emoji: '🐵', bg: 'bg-orange-600', shadow: '#7C2D12', border: 'border-orange-300', textHighlight: 'text-orange-600' },
+            { letter: 'N', lower: 'n', word: 'Nanas', emoji: '🍍', bg: 'bg-yellow-400', shadow: '#A16207', border: 'border-yellow-200', textHighlight: 'text-yellow-600' },
+            { letter: 'O', lower: 'o', word: 'Orangutan', emoji: '🦧', bg: 'bg-red-500', shadow: '#991B1B', border: 'border-red-300', textHighlight: 'text-red-600' },
+            { letter: 'P', lower: 'p', word: 'Panda', emoji: '🐼', bg: 'bg-teal-500', shadow: '#115E59', border: 'border-teal-300', textHighlight: 'text-teal-600' },
+            { letter: 'Q', lower: 'q', word: 'Quran', emoji: '📖', bg: 'bg-emerald-600', shadow: '#064E3B', border: 'border-emerald-300', textHighlight: 'text-emerald-600' },
+            { letter: 'R', lower: 'r', word: 'Rusa', emoji: '🦌', bg: 'bg-amber-600', shadow: '#78350F', border: 'border-amber-300', textHighlight: 'text-amber-700' },
+            { letter: 'S', lower: 's', word: 'Singa', emoji: '🦁', bg: 'bg-orange-500', shadow: '#9A3412', border: 'border-orange-300', textHighlight: 'text-orange-600' },
+            { letter: 'T', lower: 't', word: 'Topi', emoji: '🎩', bg: 'bg-purple-500', shadow: '#5B21B6', border: 'border-purple-300', textHighlight: 'text-purple-600' },
+            { letter: 'U', lower: 'u', word: 'Ular', emoji: '🐍', bg: 'bg-green-500', shadow: '#166534', border: 'border-green-300', textHighlight: 'text-green-600' },
+            { letter: 'V', lower: 'v', word: 'Vas Bunga', emoji: '🏺', bg: 'bg-violet-500', shadow: '#5B21B6', border: 'border-violet-300', textHighlight: 'text-violet-600' },
+            { letter: 'W', lower: 'w', word: 'Wortel', emoji: '🥕', bg: 'bg-orange-500', shadow: '#9A3412', border: 'border-orange-300', textHighlight: 'text-orange-600' },
+            { letter: 'X', lower: 'x', word: 'Xilofon', emoji: '🎹', bg: 'bg-fuchsia-500', shadow: '#86198F', border: 'border-fuchsia-300', textHighlight: 'text-fuchsia-600' },
+            { letter: 'Y', lower: 'y', word: 'Yoyo', emoji: '🪀', bg: 'bg-rose-500', shadow: '#9F1239', border: 'border-rose-300', textHighlight: 'text-rose-500' },
+            { letter: 'Z', lower: 'z', word: 'Zebra', emoji: '🦓', bg: 'bg-slate-700', shadow: '#1E293B', border: 'border-slate-400', textHighlight: 'text-slate-700' }
+        ];
+
+        // STATE APLIKASI
+        let isSoundEnabled = true;
+        let totalStars = 0;
+        let currentModalIndex = 0;
+        const learnedLetters = new Set(); // Menyimpan huruf yang sudah diklik/dipelajari Ghani
+
+        // STATE KUIS
+        let quizMode = 'letter'; // 'letter' atau 'picture'
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let sessionStars = 0;
+        let currentStreak = 0;
+        let isAnsweringLocked = false;
+
+        // INISIALISASI WEB AUDIO API (EFEK SUARA SINTETIS CERIA TANPA FILE EKSTERNAL)
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        /**
+         * Memainkan efek suara ceria menggunakan Web Audio API
+         * @param {string} type - 'pop', 'correct', 'wrong', 'fanfare'
+         */
+        function playSoundEffect(type) {
+            if (!isSoundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+
+                const now = ctx.currentTime;
+
+                if (type === 'pop') {
+                    // Suara gelembung/klik ceria
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.09);
+
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'correct') {
+                    // Melodi arpeggio naik (C5 - E5 - G5 - C6)
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+                        gain.gain.setValueAtTime(0.28, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.26);
+                    });
+                } else if (type === 'wrong') {
+                    // Nada lembut "boing" turun (ramah anak, tidak menakutkan)
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.linearRampToValueAtTime(210, now + 0.28);
+
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.31);
+                } else if (type === 'fanfare') {
+                    // Melodi kemenangan perayaan
+                    const melody = [
+                        { f: 523.25, t: 0, d: 0.15 },
+                        { f: 659.25, t: 0.15, d: 0.15 },
+                        { f: 783.99, t: 0.30, d: 0.15 },
+                        { f: 1046.50, t: 0.45, d: 0.45 }
+                    ];
+                    melody.forEach(n => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(n.f, now + n.t);
+
+                        gain.gain.setValueAtTime(0.3, now + n.t);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + n.t + n.d);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + n.t);
+                        osc.stop(now + n.t + n.d + 0.02);
+                    });
+                }
+            } catch (e) {
+                console.warn('Web Audio API tidak tersedia:', e);
+            }
+        }
+
+        /**
+         * WEB SPEECH API (TEXT-TO-SPEECH BAHASA INDONESIA id-ID)
+         * Membacakan teks dengan intonasi ramah anak untuk Ghani
+         */
+        function speakIndonesian(text) {
+            if (!isSoundEnabled) return;
+            if (!('speechSynthesis' in window)) return;
+
+            try {
+                window.speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.88; // Sedikit lebih lambat agar jelas didengar anak
+                utterance.pitch = 1.15; // Nada cerah ramah anak
+
+                const voices = window.speechSynthesis.getVoices();
+                const idVoice = voices.find(v => v.lang.toLowerCase().includes('id'));
+                if (idVoice) {
+                    utterance.voice = idVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            } catch (err) {
+                console.warn('Speech synthesis fallback aktif:', err);
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        /**
+         * TOGGLE SUARA (MUTE / UNMUTE)
+         */
+        function toggleSound() {
+            isSoundEnabled = !isSoundEnabled;
+            const btn = document.getElementById('btn-sound-toggle');
+            if (isSoundEnabled) {
+                btn.textContent = '🔊';
+                btn.classList.remove('bg-slate-400', 'shadow-[0_5px_0_#475569]', 'border-slate-300');
+                btn.classList.add('bg-sky-400', 'shadow-[0_5px_0_#0284C7]', 'border-sky-300');
+                playSoundEffect('pop');
+                speakIndonesian('Suara aktif untuk Ghani!');
+            } else {
+                btn.textContent = '🔇';
+                btn.classList.remove('bg-sky-400', 'shadow-[0_5px_0_#0284C7]', 'border-sky-300');
+                btn.classList.add('bg-slate-400', 'shadow-[0_5px_0_#475569]', 'border-slate-300');
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                }
+            }
+        }
+
+        /**
+         * MENAMBAH BINTANG GHANI + KONFETI TIAP KELIPATAN 5 BINTANG
+         */
+        function addStar(count = 1) {
+            totalStars += count;
+            const display = document.getElementById('total-stars-display');
+            display.textContent = totalStars;
+            display.parentElement.parentElement.classList.add('scale-110');
+            setTimeout(() => display.parentElement.parentElement.classList.remove('scale-110'), 250);
+
+            // Perayaan konfeti penuh layar setiap Ghani mengumpulkan kelipatan 5 bintang!
+            if (totalStars > 0 && totalStars % 5 === 0) {
+                launchBigConfetti();
+            }
+        }
+
+        function launchBigConfetti() {
+            if (typeof confetti !== 'function') return;
+            const duration = 2200;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 7,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0, y: 0.75 }
+                });
+                confetti({
+                    particleCount: 7,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1, y: 0.75 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        /**
+         * PERPINDAHAN LAYAR (HOME, LEARN, QUIZ, CELEBRATION)
+         */
+        function switchScreen(screenName) {
+            playSoundEffect('pop');
+            const screens = ['home', 'learn', 'quiz', 'celebration'];
+            screens.forEach(s => {
+                const el = document.getElementById(`screen-${s}`);
+                if (s === screenName) {
+                    el.classList.remove('hidden');
+                    el.classList.add('flex');
+                } else {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+
+            const btnHome = document.getElementById('btn-home');
+            if (screenName === 'home') {
+                btnHome.classList.add('hidden');
+                btnHome.classList.remove('flex');
+            } else {
+                btnHome.classList.remove('hidden');
+                btnHome.classList.add('flex');
+            }
+        }
+
+        /**
+         * SAPAAN MULAI KHUSUS GHANI DARI LAYAR PEMBUKA
+         */
+        function greetGhaniAndStart() {
+            playSoundEffect('correct');
+            speakIndonesian('Halo Ghani! Ayo kita bermain mengenal huruf A sampai Z!');
+            startLearnMode(false);
+        }
+
+        /**
+         * ==========================================
+         * BAGIAN 1: MODE BELAJAR (JELAJAH ALFABET)
+         * ==========================================
+         */
+        function renderAlphabetGrid() {
+            const grid = document.getElementById('alphabet-grid');
+            grid.innerHTML = '';
+
+            ALPHABET_DATA.forEach((item, index) => {
+                const isLearned = learnedLetters.has(item.letter);
+                const card = document.createElement('button');
+
+                // Aksen khusus untuk huruf G (Ghani)
+                const specialClass = item.isSpecialGhani ? 'special-ghani-card ring-4 ring-amber-300' : '';
+
+                card.className = `${item.bg} ${specialClass} text-white rounded-3xl p-3.5 sm:p-4 border-4 ${item.border} btn-3d flex flex-col items-center justify-between aspect-square relative overflow-visible cursor-pointer`;
+                card.style.boxShadow = `0 7px 0 ${item.shadow}`;
+                card.setAttribute('aria-label', `Huruf ${item.letter} untuk ${item.word}`);
+
+                // Badge pojok kanan atas: Mahkota untuk Huruf G, atau Bintang kecil jika sudah dipelajari Ghani
+                let topBadge = '';
+                if (item.isSpecialGhani) {
+                    topBadge = `<span class="absolute -top-3 -right-2 bg-amber-300 text-amber-950 text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded-full border-2 border-white shadow-sm">👑 Ghani</span>`;
+                } else if (isLearned) {
+                    topBadge = `<span class="absolute -top-2.5 -right-2 bg-white text-emerald-600 text-xs sm:text-sm font-bold w-7 h-7 rounded-full border-2 border-emerald-400 shadow-xs flex items-center justify-center">⭐</span>`;
+                }
+
+                card.innerHTML = `
+                    ${topBadge}
+                    <div class="w-full flex justify-between items-start mt-1">
+                        <span class="text-3xl sm:text-4xl font-bold leading-none drop-shadow-xs">${item.letter}${item.lower}</span>
+                        <span class="text-2xl sm:text-3xl drop-shadow-xs">${item.emoji}</span>
+                    </div>
+                    <div class="w-full text-center mt-2 bg-white/25 backdrop-blur-xs rounded-xl py-1 px-1.5">
+                        <span class="text-xs sm:text-sm font-bold tracking-wide block truncate">${item.word}</span>
+                    </div>
+                `;
+
+                card.onclick = () => openLetterModal(index);
+                grid.appendChild(card);
+            });
+
+            document.getElementById('learned-count').textContent = learnedLetters.size;
+        }
+
+        function startLearnMode(shouldSpeak = true) {
+            renderAlphabetGrid();
+            switchScreen('learn');
+            if (shouldSpeak) {
+                speakIndonesian('Ayo Ghani, ketuk kartu huruf mana saja untuk mendengar suaranya!');
+            }
+        }
+
+        function openLetterModal(index) {
+            currentModalIndex = index;
+            const item = ALPHABET_DATA[index];
+            playSoundEffect('pop');
+
+            // Tandai huruf sudah dipelajari Ghani
+            if (!learnedLetters.has(item.letter)) {
+                learnedLetters.add(item.letter);
+                renderAlphabetGrid();
+            }
+
+            // Tampilkan badge spesial jika huruf G (Ghani)
+            const ghaniSpecialEl = document.getElementById('modal-ghani-special');
+            if (item.isSpecialGhani) {
+                ghaniSpecialEl.classList.remove('hidden');
+            } else {
+                ghaniSpecialEl.classList.add('hidden');
+            }
+
+            // Isi konten modal
+            const badge = document.getElementById('modal-letter-badge');
+            badge.className = `inline-flex items-center justify-center gap-3 px-8 py-3 rounded-3xl text-white font-bold text-6xl sm:text-7xl shadow-md mb-3 ${item.bg}`;
+
+            document.getElementById('modal-upper').textContent = item.letter;
+            document.getElementById('modal-lower').textContent = item.lower;
+            document.getElementById('modal-emoji').textContent = item.emoji;
+
+            // Sorot huruf pertama pada kata contoh
+            const restOfWord = item.word.slice(1);
+            document.getElementById('modal-word').innerHTML = `<span class="${item.textHighlight}">${item.letter}</span>${restOfWord}`;
+            document.getElementById('modal-phonetic').textContent = item.isSpecialGhani
+                ? `"G" untuk Gajah, dan juga untuk Ghani!`
+                : `"${item.letter}" untuk ${item.word}`;
+
+            // Tampilkan modal
+            const modal = document.getElementById('letter-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const modalCard = document.getElementById('letter-modal-card');
+            modalCard.classList.remove('animate-pop-in');
+            void modalCard.offsetWidth;
+            modalCard.classList.add('animate-pop-in');
+
+            // Bacakan huruf dan contoh kata
+            speakCurrentModalLetter();
+        }
+
+        function speakCurrentModalLetter() {
+            const item = ALPHABET_DATA[currentModalIndex];
+            if (item.isSpecialGhani) {
+                speakIndonesian(`G... G untuk Gajah, dan juga huruf awal nama Ghani! Hebat!`);
+            } else {
+                speakIndonesian(`${item.letter}... ${item.letter} untuk ${item.word}!`);
+            }
+        }
+
+        function navigateModalLetter(direction) {
+            let nextIndex = currentModalIndex + direction;
+            if (nextIndex < 0) nextIndex = ALPHABET_DATA.length - 1;
+            if (nextIndex >= ALPHABET_DATA.length) nextIndex = 0;
+            openLetterModal(nextIndex);
+        }
+
+        function closeLetterModal() {
+            playSoundEffect('pop');
+            const modal = document.getElementById('letter-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function closeModalOnBackdrop(event) {
+            if (event.target.id === 'letter-modal') {
+                closeLetterModal();
+            }
+        }
+
+        /**
+         * ==========================================
+         * BAGIAN 2: MODE BERMAIN / KUIS INTERAKTIF
+         * ==========================================
+         */
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startQuizMode(mode) {
+            quizMode = mode;
+            sessionStars = 0;
+            currentStreak = 0;
+            currentQuestionIndex = 0;
+
+            // Ambil 10 huruf acak dari A-Z untuk 10 soal
+            quizQuestions = shuffleArray(ALPHABET_DATA).slice(0, 10);
+
+            const badge = document.getElementById('quiz-mode-badge');
+            if (mode === 'letter') {
+                badge.textContent = '🎧 Tebak Huruf';
+                badge.className = 'bg-sky-100 text-sky-700 font-bold px-3.5 py-1.5 rounded-full text-sm sm:text-base';
+            } else {
+                badge.textContent = '🖼️ Tebak Gambar';
+                badge.className = 'bg-rose-100 text-rose-700 font-bold px-3.5 py-1.5 rounded-full text-sm sm:text-base';
+            }
+
+            document.getElementById('quiz-session-stars').textContent = '0';
+            updateStreakUI();
+            switchScreen('quiz');
+            loadQuizQuestion();
+        }
+
+        function restartCurrentQuiz() {
+            startQuizMode(quizMode);
+        }
+
+        function updateStreakUI() {
+            const streakBadge = document.getElementById('streak-badge');
+            const streakCount = document.getElementById('quiz-streak-count');
+            if (currentStreak >= 2) {
+                streakBadge.classList.remove('hidden');
+                streakBadge.classList.add('flex');
+                streakCount.textContent = `${currentStreak}x`;
+            } else {
+                streakBadge.classList.add('hidden');
+                streakBadge.classList.remove('flex');
+            }
+        }
+
+        function loadQuizQuestion() {
+            isAnsweringLocked = false;
+
+            const target = quizQuestions[currentQuestionIndex];
+            const qNum = currentQuestionIndex + 1;
+
+            document.getElementById('quiz-current-num').textContent = qNum;
+            document.getElementById('quiz-progress-bar').style.width = `${(qNum / 10) * 100}%`;
+
+            const feedbackEl = document.getElementById('quiz-feedback');
+            feedbackEl.textContent = '';
+            feedbackEl.className = 'min-h-[2.5rem] mt-3 flex items-center justify-center text-lg sm:text-xl font-bold';
+
+            const distractors = shuffleArray(ALPHABET_DATA.filter(item => item.letter !== target.letter)).slice(0, 3);
+            const options = shuffleArray([target, ...distractors]);
+
+            const instructionEl = document.getElementById('quiz-instruction');
+            const promptArea = document.getElementById('quiz-prompt-area');
+            const optionsGrid = document.getElementById('quiz-options-grid');
+            optionsGrid.innerHTML = '';
+
+            if (quizMode === 'letter') {
+                // MODE 1: TEBAK HURUF
+                instructionEl.textContent = `Ghani, manakah huruf untuk "${target.word}"?`;
+                promptArea.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="text-6xl sm:text-7xl bg-amber-50 p-4 rounded-3xl border-4 border-amber-200 animate-playful">
+                            ${target.emoji}
+                        </div>
+                        <button onclick="repeatQuizPrompt()" class="bg-sky-500 hover:bg-sky-400 text-white font-bold text-xl sm:text-2xl px-6 py-4 rounded-3xl shadow-[0_6px_0_#0369A1] border-2 border-sky-300 btn-3d pulse-audio flex items-center gap-3 cursor-pointer">
+                            <span class="text-3xl">🔊</span>
+                            <span>Ulangi Suara</span>
+                        </button>
+                    </div>
+                `;
+
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = `${opt.bg} text-white rounded-3xl py-6 sm:py-8 px-4 border-4 ${opt.border} btn-3d flex items-center justify-center gap-2 text-5xl sm:text-6xl font-bold shadow-lg cursor-pointer`;
+                    btn.style.boxShadow = `0 8px 0 ${opt.shadow}`;
+                    btn.innerHTML = `<span>${opt.letter}</span><span class="opacity-90 text-4xl sm:text-5xl">${opt.lower}</span>`;
+                    btn.onclick = () => handleQuizAnswer(opt.letter === target.letter, btn, target);
+                    optionsGrid.appendChild(btn);
+                });
+
+                setTimeout(() => repeatQuizPrompt(), 300);
+
+            } else {
+                // MODE 2: TEBAK GAMBAR AWALAN
+                instructionEl.textContent = `Ghani, gambar mana yang berawalan huruf...`;
+                promptArea.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="${target.bg} text-white text-6xl sm:text-7xl font-bold px-8 py-4 rounded-3xl shadow-md border-4 ${target.border} animate-pop-in">
+                            ${target.letter}${target.lower}
+                        </div>
+                        <button onclick="repeatQuizPrompt()" aria-label="Ulangi Suara Soal" class="w-16 h-16 bg-sky-500 hover:bg-sky-400 text-white text-3xl rounded-2xl shadow-[0_5px_0_#0369A1] border-2 border-sky-300 btn-3d pulse-audio flex items-center justify-center cursor-pointer">
+                            🔊
+                        </button>
+                    </div>
+                `;
+
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = `bg-white hover:bg-amber-50 text-slate-800 rounded-3xl py-5 sm:py-6 px-4 border-4 border-slate-200 btn-3d flex flex-col items-center justify-center gap-2 shadow-[0_7px_0_#CBD5E1] cursor-pointer`;
+                    btn.innerHTML = `
+                        <span class="text-6xl sm:text-7xl drop-shadow-xs">${opt.emoji}</span>
+                        <span class="text-xl sm:text-2xl font-bold text-slate-700">${opt.word}</span>
+                    `;
+                    btn.onclick = () => handleQuizAnswer(opt.letter === target.letter, btn, target);
+                    optionsGrid.appendChild(btn);
+                });
+
+                setTimeout(() => repeatQuizPrompt(), 300);
+            }
+        }
+
+        function repeatQuizPrompt() {
+            const target = quizQuestions[currentQuestionIndex];
+            if (!target) return;
+
+            if (quizMode === 'letter') {
+                speakIndonesian(`Ghani, cari huruf ${target.letter}... untuk ${target.word}!`);
+            } else {
+                speakIndonesian(`Ghani, gambar mana yang berawalan huruf ${target.letter}?`);
+            }
+        }
+
+        function handleQuizAnswer(isCorrect, buttonEl, targetItem) {
+            if (isAnsweringLocked) return;
+
+            const feedbackEl = document.getElementById('quiz-feedback');
+
+            if (isCorrect) {
+                isAnsweringLocked = true;
+                playSoundEffect('correct');
+
+                buttonEl.classList.add('ring-8', 'ring-emerald-300', 'scale-105');
+
+                // Tambah bintang & streak
+                sessionStars++;
+                currentStreak++;
+                updateStreakUI();
+                addStar(1);
+                document.getElementById('quiz-session-stars').textContent = sessionStars;
+
+                // Pujian acak memanggil nama Ghani secara langsung
+                const praiseOptions = [
+                    { text: `Hebat Ghani! 🌟 ${targetItem.letter} untuk ${targetItem.word}!`, speech: `Hebat Ghani! ${targetItem.letter} untuk ${targetItem.word}!` },
+                    { text: `Pintar sekali Ghani! 🎉 ${targetItem.letter} untuk ${targetItem.word}!`, speech: `Pintar sekali Ghani! ${targetItem.letter} untuk ${targetItem.word}!` },
+                    { text: `Keren Ghani! ⭐ ${targetItem.letter} untuk ${targetItem.word}!`, speech: `Keren Ghani! ${targetItem.letter} untuk ${targetItem.word}!` },
+                    { text: `Wah, Ghani jagoan alfabet! 👏`, speech: `Wah, Ghani jagoan alfabet! ${targetItem.letter} untuk ${targetItem.word}!` }
+                ];
+                const chosenPraise = praiseOptions[Math.floor(Math.random() * praiseOptions.length)];
+
+                feedbackEl.textContent = chosenPraise.text;
+                feedbackEl.className = 'min-h-[2.5rem] mt-3 flex items-center justify-center text-lg sm:text-xl font-bold text-emerald-600 animate-bounce';
+
+                speakIndonesian(chosenPraise.speech);
+
+                // Konfeti perayaan kecil tiap jawaban benar
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 45,
+                        spread: 60,
+                        origin: { y: 0.7 }
+                    });
+                }
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < 10) {
+                        loadQuizQuestion();
+                    } else {
+                        showCelebrationScreen();
+                    }
+                }, 1900);
+
+            } else {
+                // Jawaban kurang tepat: reset streak, beri dorongan positif memanggil nama Ghani
+                currentStreak = 0;
+                updateStreakUI();
+                playSoundEffect('wrong');
+
+                buttonEl.classList.remove('animate-shake');
+                void buttonEl.offsetWidth;
+                buttonEl.classList.add('animate-shake', 'opacity-60');
+
+                feedbackEl.textContent = 'Ayo coba lagi, Ghani pasti bisa! 💪😊';
+                feedbackEl.className = 'min-h-[2.5rem] mt-3 flex items-center justify-center text-lg sm:text-xl font-bold text-amber-600';
+
+                speakIndonesian('Ayo coba lagi, Ghani!');
+            }
+        }
+
+        function showCelebrationScreen() {
+            switchScreen('celebration');
+            playSoundEffect('fanfare');
+
+            document.getElementById('celebration-stars').textContent = sessionStars;
+            speakIndonesian(`Hebat sekali, Ghani! Kamu mengumpulkan ${sessionStars} bintang! Wah, Ghani jagoan alfabet!`);
+
+            launchBigConfetti();
+        }
+
+        // INISIALISASI SAAT HALAMAN DIMUAT
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAlphabetGrid();
+        });
+    </script>
+</body>
+</html>
